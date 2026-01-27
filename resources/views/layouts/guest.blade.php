@@ -7,23 +7,42 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,800&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <style>
+            /* Animation pour les cercles de fond */
+            @keyframes orbit {
+                from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+                to   { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+            }
+            .animate-orbit {
+                animation: orbit 20s linear infinite;
+            }
+        </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+    <body class="font-sans antialiased text-gray-900 overflow-x-hidden">
+        <div class="min-h-screen relative flex flex-col items-center justify-center bg-[#0f172a]">
+            
+            <div class="absolute top-0 -left-20 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-0 -right-20 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px]"></div>
+            
+            <div class="relative z-10 mb-8 transition-transform hover:scale-110 duration-500">
+                <a href="/" class="flex flex-col items-center group">
+                    <div class="p-4 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 shadow-2xl group-hover:shadow-indigo-500/40 transition-all">
+                        <x-application-logo class="w-16 h-16 fill-current text-white" />
+                    </div>
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="relative z-10 w-full px-4">
                 {{ $slot }}
+            </div>
+
+            <div class="relative z-10 py-8 text-gray-500 text-sm font-medium">
+                &copy; {{ date('Y') }} {{ config('app.name') }}. Built for professionals.
             </div>
         </div>
     </body>
