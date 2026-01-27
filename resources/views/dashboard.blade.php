@@ -8,7 +8,7 @@
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            <!-- Welcome -->
+            
             <div class="bg-white shadow-sm rounded-xl p-6">
                 <h3 class="text-lg font-bold">
                     Bienvenue {{ auth()->user()->nom }} 👋
@@ -21,13 +21,13 @@
                 </p>
             </div>
 
-            <!-- Search -->
+ 
             <div class="bg-white shadow-sm rounded-xl p-6">
                 <h4 class="font-semibold mb-4 text-gray-700">
                     Rechercher un utilisateur
                 </h4>
 
-                <form method="GET" action="{{ route('users.search') }}">
+                <form method="GET" action="{{ route('dashboard') }}">
                     <div class="flex gap-3">
                         <input
                             type="text"
