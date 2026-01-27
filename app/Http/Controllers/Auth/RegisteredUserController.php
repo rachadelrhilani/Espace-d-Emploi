@@ -31,19 +31,21 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-         $request->validate([
+        $request->validate([
             'nom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:recruteur,candidat'],
 
-            // Recruteur
-            'nom_entreprise' => ['required_if:role,recruteur'],
-            'localisation' => ['required_if:role,recruteur'],
+            // Recruteur : on met 'nullable' pour que le validateur ne s'excite pas si le rôle est candidat
+            'nom_entreprise' => ['required_if:role,recruteur', 'nullable', 'string', 'max:255'],
+            'localisation' => ['required_if:role,recruteur', 'nullable', 'string', 'max:255'],
+            'description_entreprise' => ['required_if:role,recruteur', 'nullable', 'string'],
+            'site_web' => ['nullable', 'url'], // Changé de required_if à nullable pour plus de souplesse
 
             // Candidat
-            'specialite' => ['required_if:role,candidat'],
-            'annees_experience' => ['required_if:role,candidat', 'integer', 'min:0'],
+            'specialite' => ['required_if:role,candidat', 'nullable', 'string'],
+            'annees_experience' => ['required_if:role,candidat', 'nullable', 'integer', 'min:0'],
             'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:2048'],
         ]);
 
@@ -55,7 +57,7 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
         ]);
 
-      
+
         if ($request->role === 'recruteur') {
             ProfilRecruteur::create([
                 'user_id' => $user->id,

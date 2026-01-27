@@ -15,6 +15,15 @@
             <div class="flex-1 overflow-y-auto custom-scrollbar bg-white">
                 <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="p-8 space-y-5">
                     @csrf
+                    @if ($errors->any())
+                    <div class="bg-red-50 text-red-600 p-4 rounded-xl text-xs">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-1">
@@ -39,6 +48,7 @@
 
                     <div id="recruteur-fields" class="hidden grid grid-cols-2 gap-3 p-4 bg-indigo-50/50 rounded-2xl animate-fadeIn">
                         <input name="nom_entreprise" placeholder="Entreprise" class="border-none rounded-lg py-2 text-sm shadow-sm" />
+                        <input name="site_web" placeholder="Site Web (URL)" class="border-none rounded-lg py-2 text-sm shadow-sm" />
                         <input name="localisation" placeholder="Ville" class="border-none rounded-lg py-2 text-sm shadow-sm" />
                         <textarea name="description_entreprise" rows="2" class="col-span-2 border-none rounded-lg text-sm shadow-sm" placeholder="Bref résumé..."></textarea>
                     </div>
