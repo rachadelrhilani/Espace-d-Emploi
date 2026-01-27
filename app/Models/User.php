@@ -58,4 +58,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(ProfilCandidat::class);
     }
+    public function amitiesEnvoyees()
+    {
+        return $this->hasMany(Amitie::class, 'id_expediteur');
+    }
+
+    public function amitiesRecues()
+    {
+        return $this->hasMany(Amitie::class, 'id_destinataire');
+    }
 }
