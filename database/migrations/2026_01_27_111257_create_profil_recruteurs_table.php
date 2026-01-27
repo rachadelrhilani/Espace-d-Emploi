@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('profil_recruteurs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nom_entreprise');
+            $table->text('description_entreprise');
+            $table->string('site_web')->nullable();
+            $table->string('localisation');
             $table->timestamps();
         });
     }
