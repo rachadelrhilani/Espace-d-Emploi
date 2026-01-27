@@ -11,7 +11,7 @@
             </div>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar bg-white">
-                <form method="POST" action="{{ route('register') }}" class="p-8 space-y-5">
+                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="p-8 space-y-5">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
