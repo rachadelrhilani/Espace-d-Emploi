@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('amities', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_expediteur')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_destinataire')->constrained('users')->onDelete('cascade');
+            $table->enum('statut', ['pending', 'accepted', 'rejected']);
             $table->timestamps();
         });
     }
