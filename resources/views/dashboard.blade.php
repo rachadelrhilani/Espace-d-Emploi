@@ -24,7 +24,7 @@
             <!-- Search -->
             <div class="bg-white shadow-sm rounded-xl p-6">
                 <h4 class="font-semibold mb-4 text-gray-700">
-                    🔍 Rechercher un utilisateur
+                    Rechercher un utilisateur
                 </h4>
 
                 <form method="GET" action="{{ route('users.search') }}">
