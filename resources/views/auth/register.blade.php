@@ -1,10 +1,12 @@
 <x-guest-layout>
     <div class="flex items-center justify-center p-4 min-h-[calc(100vh-200px)]">
         <div class="w-full max-w-3xl bg-white/95 backdrop-blur-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20 z-10 flex flex-col md:flex-row max-h-[90vh]">
-            
+
             <div class="bg-gradient-to-br from-indigo-600 to-violet-700 md:w-1/3 p-8 text-white flex flex-col justify-center items-center text-center shrink-0">
                 <div class="w-16 h-16 bg-white/20 rounded-2xl mb-4 flex items-center justify-center backdrop-blur-md">
-                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
                 </div>
                 <h2 class="text-2xl font-black tracking-tight uppercase">Inscription</h2>
                 <p class="text-indigo-100 mt-2 text-sm">Créez votre profil professionnel.</p>
@@ -45,6 +47,11 @@
                         <input name="specialite" placeholder="Spécialité" class="border-none rounded-lg py-2 text-sm shadow-sm" />
                         <input name="annees_experience" type="number" placeholder="Exp (ans)" class="border-none rounded-lg py-2 text-sm shadow-sm" />
                         <textarea name="competences" rows="3" class="col-span-2 border-none rounded-lg text-sm shadow-sm" placeholder="Listez vos compétences..."></textarea>
+                        <input
+                            type="file"
+                            name="cv"
+                            accept=".pdf,.doc,.docx"
+                            class="col-span-2 border-none rounded-lg py-2 text-sm shadow-sm bg-white" />
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -75,13 +82,16 @@
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #e2e8f0;
             border-radius: 10px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #cbd5e1;
         }

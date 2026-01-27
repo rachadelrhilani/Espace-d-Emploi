@@ -31,21 +31,23 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:recruteur,candidat',
+         $request->validate([
+            'nom' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:recruteur,candidat'],
 
             // Recruteur
-            'nom_entreprise' => 'required_if:role,recruteur',
-            'localisation' => 'required_if:role,recruteur',
+            'nom_entreprise' => ['required_if:role,recruteur'],
+            'localisation' => ['required_if:role,recruteur'],
 
             // Candidat
-            'specialite' => 'required_if:role,candidat',
-            'annees_experience' => 'required_if:role,candidat|integer|min:0',
+            'specialite' => ['required_if:role,candidat'],
+            'annees_experience' => ['required_if:role,candidat', 'integer', 'min:0'],
+            'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:2048'],
         ]);
 
+        // Création utilisateur
         $user = User::create([
             'nom' => $request->nom,
             'email' => $request->email,
@@ -53,6 +55,7 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
         ]);
 
+      
         if ($request->role === 'recruteur') {
             ProfilRecruteur::create([
                 'user_id' => $user->id,
@@ -62,20 +65,26 @@ class RegisteredUserController extends Controller
                 'localisation' => $request->localisation,
             ]);
         }
-
         if ($request->role === 'candidat') {
+
+            $cvPath = null;
+
+            if ($request->hasFile('cv')) {
+                $cvPath = $request->file('cv')->store('cvs', 'public');
+            }
+
             ProfilCandidat::create([
                 'user_id' => $user->id,
                 'specialite' => $request->specialite,
                 'annees_experience' => $request->annees_experience,
                 'competences' => $request->competences,
+                'cv' => $cvPath,
             ]);
         }
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }
