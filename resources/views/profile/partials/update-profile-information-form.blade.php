@@ -38,6 +38,18 @@
                 required
             />
         </div>
+        {{-- Biographie (Général) --}}
+        <div>
+            <x-input-label for="biographie" value="Biographie" />
+            <textarea
+                id="biographie"
+                name="biographie"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                rows="4"
+                placeholder="Décrivez votre parcours en quelques mots..."
+            >{{ old('biographie', $user->biographie) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('biographie')" />
+        </div>
 
         {{-- ================= CANDIDAT ================= --}}
         @if ($user->role === 'candidat')
