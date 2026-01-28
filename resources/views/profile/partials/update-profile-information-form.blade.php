@@ -5,60 +5,121 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Update your profile information.") }}
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+    <form method="POST" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
-    </form>
+        @method('PATCH')
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('patch')
-
+        {{-- Nom --}}
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('nom', $user->nom)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="nom" value="Nom complet" />
+            <x-text-input
+                id="nom"
+                name="nom"
+                type="text"
+                class="mt-1 block w-full"
+                value="{{ old('nom', $user->nom) }}"
+                required
+            />
         </div>
 
+        {{-- Email --}}
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-input-label for="email" value="Email" />
+            <x-text-input
+                id="email"
+                name="email"
+                type="email"
+                class="mt-1 block w-full"
+                value="{{ old('email', $user->email) }}"
+                required
+            />
+        </div>
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+        {{-- ================= CANDIDAT ================= --}}
+        @if ($user->role === 'candidat')
+            <div class="border-t pt-6">
+                <h3 class="font-semibold text-gray-700 mb-4">Profil Candidat</h3>
+
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
+                    <x-input-label for="specialite" value="Spécialité" />
+                    <x-text-input
+                        id="specialite"
+                        name="specialite"
+                        type="text"
+                        class="mt-1 block w-full"
+                        value="{{ old('specialite', $user->profilCandidat->specialite ?? '') }}"
+                    />
                 </div>
-            @endif
-        </div>
 
+                <div>
+                    <x-input-label for="annees_experience" value="Années d'expérience" />
+                    <x-text-input
+                        id="annees_experience"
+                        name="annees_experience"
+                        type="number"
+                        class="mt-1 block w-full"
+                        value="{{ old('annees_experience', $user->profilCandidat->annees_experience ?? '') }}"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="competences" value="Compétences" />
+                    <textarea
+                        name="competences"
+                        class="mt-1 block w-full rounded-md border-gray-300"
+                        rows="3"
+                    >{{ old('competences', $user->profilCandidat->competences ?? '') }}</textarea>
+                </div>
+            </div>
+        @endif
+
+        {{-- ================= RECRUTEUR ================= --}}
+        @if ($user->role === 'recruteur')
+            <div class="border-t pt-6">
+                <h3 class="font-semibold text-gray-700 mb-4">Profil Recruteur</h3>
+
+                <div>
+                    <x-input-label for="nom_entreprise" value="Nom de l'entreprise" />
+                    <x-text-input
+                        id="nom_entreprise"
+                        name="nom_entreprise"
+                        type="text"
+                        class="mt-1 block w-full"
+                        value="{{ old('nom_entreprise', $user->profilRecruteur->nom_entreprise ?? '') }}"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="site_web" value="Site web" />
+                    <x-text-input
+                        id="site_web"
+                        name="site_web"
+                        type="url"
+                        class="mt-1 block w-full"
+                        value="{{ old('site_web', $user->profilRecruteur->site_web ?? '') }}"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="localisation" value="Localisation" />
+                    <x-text-input
+                        id="localisation"
+                        name="localisation"
+                        type="text"
+                        class="mt-1 block w-full"
+                        value="{{ old('localisation', $user->profilRecruteur->localisation ?? '') }}"
+                    />
+                </div>
+            </div>
+        @endif
+
+        {{-- Bouton --}}
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
+            <x-primary-button>Enregistrer</x-primary-button>
         </div>
     </form>
 </section>

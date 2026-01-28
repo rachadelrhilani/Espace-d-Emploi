@@ -14,7 +14,7 @@
                 @if($user->profilCandidat->cv)
                     <a href="{{ asset('storage/'.$user->profilCandidat->cv) }}"
                        class="text-indigo-600 font-bold"
-                       target="_blank">
+                       target="_blank" download="cv.pdf">
                         📄 Télécharger le CV
                     </a>
                 @endif

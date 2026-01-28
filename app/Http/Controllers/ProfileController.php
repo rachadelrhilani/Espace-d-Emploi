@@ -18,9 +18,6 @@ class ProfileController extends Controller
 
         return view('users.show', compact('user'));
     }
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
