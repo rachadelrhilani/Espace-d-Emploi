@@ -9,7 +9,7 @@
         </p>
     </header>
 
-    <form method="POST" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('PATCH')
         {{-- Photo de profil --}}
@@ -24,6 +24,7 @@
                 id="photo" 
                 name="photo" 
                 type="file" 
+                accept="image/*"
                 class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" 
             />
             <x-input-error class="mt-2" :messages="$errors->get('photo')" />

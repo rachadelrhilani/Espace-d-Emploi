@@ -33,26 +33,19 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-    // mise à jour
     $user->fill($request->validated());
 
-    // Si email changé → reset vérification
     if ($user->isDirty('email')) {
         $user->email_verified_at = null;
     }
 
-    // 📸 UPLOAD PHOTO
     if ($request->hasFile('photo')) {
 
-        // Supprimer ancienne photo si existe
         if ($user->photo && Storage::disk('public')->exists($user->photo)) {
             Storage::disk('public')->delete($user->photo);
         }
 
-        // Stocker la nouvelle photo
         $path = $request->file('photo')->store('photos', 'public');
-
-        // Sauvegarder le chemin en DB
         $user->photo = $path;
     }
 
