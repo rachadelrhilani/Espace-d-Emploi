@@ -29,31 +29,66 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $user = $request->user();
 
-    $user->fill($request->validated());
+
+public function update(ProfileUpdateRequest $request): RedirectResponse
+{
+    $user = $request->user();
+    $data = $request->validated();
+
+    /* ================= USER ================= */
+    $user->fill([
+        'nom' => $data['nom'],
+        'email' => $data['email'],
+        'biographie' => $data['biographie'] ?? $user->biographie,
+    ]);
 
     if ($user->isDirty('email')) {
         $user->email_verified_at = null;
     }
 
+    /* ================= PHOTO ================= */
     if ($request->hasFile('photo')) {
 
         if ($user->photo && Storage::disk('public')->exists($user->photo)) {
             Storage::disk('public')->delete($user->photo);
         }
 
-        $path = $request->file('photo')->store('photos', 'public');
-        $user->photo = $path;
+        $user->photo = $request->file('photo')->store('photos', 'public');
     }
 
     $user->save();
 
+    /* ================= CANDIDAT ================= */
+    if ($user->role === 'candidat') {
+
+        $user->profilCandidat()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'specialite' => $data['specialite'] ?? null,
+                'annees_experience' => $data['annees_experience'] ?? null,
+                'competences' => $data['competences'] ?? null,
+            ]
+        );
+    }
+
+    /* ================= RECRUTEUR ================= */
+    if ($user->role === 'recruteur') {
+
+        $user->profilRecruteur()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'nom_entreprise' => $data['nom_entreprise'] ?? null,
+                'site_web' => $data['site_web'] ?? null,
+                'localisation' => $data['localisation'] ?? null,
+            ]
+        );
+    }
+
     return Redirect::route('profile.edit')
         ->with('status', 'profile-updated');
-    }
+}
+
 
     /**
      * Delete the user's account.
