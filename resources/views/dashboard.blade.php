@@ -44,45 +44,82 @@
                 </form>
             </div>
 
-            <!-- Quick Results (optionnel) -->
-            @isset($users)
-                <div class="bg-white shadow-sm rounded-xl p-6">
-                    <h4 class="font-semibold mb-4 text-gray-700">
-                        Résultats
-                    </h4>
+          @isset($users)
+<div class="bg-white shadow-sm rounded-xl p-6">
+    <h4 class="font-semibold mb-4 text-gray-700">
+        Résultats
+    </h4>
 
-                    <div class="grid md:grid-cols-2 gap-4">
-                        @forelse($users as $user)
-                            <div class="border rounded-xl p-4 hover:shadow transition">
-                                <h5 class="font-bold">{{ $user->nom }}</h5>
-                                <p class="text-sm text-gray-500">
-                                    {{ ucfirst($user->role) }}
-                                </p>
+    <div class="grid md:grid-cols-2 gap-4">
+        @forelse($users as $user)
+            <div class="flex gap-4 border rounded-xl p-4 hover:shadow transition">
 
-                                @if($user->role === 'candidat')
-                                    <p class="text-sm text-indigo-600 mt-1">
-                                        🎯 {{ $user->profilCandidat->specialite ?? '' }}
-                                    </p>
-                                @else
-                                    <p class="text-sm text-indigo-600 mt-1">
-                                        🏢 {{ $user->profilRecruteur->nom_entreprise ?? '' }}
-                                    </p>
-                                @endif
+                {{-- PHOTO --}}
+                <img
+                    src="{{ $user->photo
+                        ? asset('storage/'.$user->photo)
+                        : asset('images/avatar.png') }}"
+                    alt="Photo"
+                    class="h-16 w-16 rounded-full object-cover border"
+                />
 
-                                <a
-                                    href="{{ route('users.show', $user) }}"
-                                    class="inline-block mt-3 text-indigo-600 font-semibold text-sm hover:underline"
-                                >
-                                    Voir le profil →
-                                </a>
-                            </div>
-                        @empty
-                            <p class="text-gray-500">Aucun utilisateur trouvé.</p>
-                        @endforelse
-                    </div>
+                <div class="flex-1">
+                    <h5 class="font-bold">{{ $user->nom }}</h5>
+
+                    <p class="text-sm text-gray-500">
+                        {{ ucfirst($user->role) }}
+                    </p>
+
+                    {{-- BIO --}}
+                    @if($user->biographie)
+                        <p class="text-sm text-gray-600 mt-1 line-clamp-2">
+                            {{ $user->biographie }}
+                        </p>
+                    @endif
+
+                    {{-- ===== CANDIDAT ===== --}}
+                    @if($user->role === 'candidat' && $user->profilCandidat)
+                        @if($user->profilCandidat->specialite)
+                            <p class="text-sm text-indigo-600 mt-1">
+                                🎯 {{ $user->profilCandidat->specialite }}
+                            </p>
+                        @endif
+
+                        @if($user->profilCandidat->annees_experience !== null)
+                            <p class="text-xs text-gray-500">
+                                {{ $user->profilCandidat->annees_experience }} ans d’expérience
+                            </p>
+                        @endif
+                    @endif
+
+                    {{-- ===== RECRUTEUR ===== --}}
+                    @if($user->role === 'recruteur' && $user->profilRecruteur)
+                        @if($user->profilRecruteur->nom_entreprise)
+                            <p class="text-sm text-indigo-600 mt-1">
+                                🏢 {{ $user->profilRecruteur->nom_entreprise }}
+                            </p>
+                        @endif
+
+                        @if($user->profilRecruteur->localisation)
+                            <p class="text-xs text-gray-500">
+                                📍 {{ $user->profilRecruteur->localisation }}
+                            </p>
+                        @endif
+                    @endif
+
+                    <a
+                        href="{{ route('users.show', $user) }}"
+                        class="inline-block mt-2 text-indigo-600 font-semibold text-sm hover:underline"
+                    >
+                        Voir le profil →
+                    </a>
                 </div>
-            @endisset
-
-        </div>
+            </div>
+        @empty
+            <p class="text-gray-500">Aucun utilisateur trouvé.</p>
+        @endforelse
     </div>
+</div>
+@endisset
+
 </x-app-layout>
