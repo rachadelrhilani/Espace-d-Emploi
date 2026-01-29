@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AmitieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserSearchController;
@@ -13,6 +14,8 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+    Route::post('/amis/{user}', [AmitieController::class, 'store'])
+    ->name('amis.add');
 
     Route::get('/profil/{user}', [ProfileController::class, 'show'])
         ->name('users.show');

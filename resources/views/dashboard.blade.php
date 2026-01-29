@@ -12,7 +12,7 @@
             <div class="bg-white shadow-sm rounded-xl p-6">
                 <h3 class="text-lg font-bold">
                     Bienvenue {{ auth()->user()->nom }} 👋
-                </h3>
+                </h3> 
                 <p class="text-sm text-gray-500">
                     Vous êtes connecté en tant que
                     <span class="font-semibold text-indigo-600">
