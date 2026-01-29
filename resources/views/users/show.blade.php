@@ -106,6 +106,58 @@
                 @endif
             </div>
         @endif
+        @auth
+@if(auth()->id() !== $user->id)
+
+<div id="friend-action">
+    <button
+    type="button"
+    data-user-id="{{ $user->id }}"
+    onclick="sendFriendRequest(this.getAttribute('data-user-id'))"
+    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+    id="friend-btn"
+>
+    ➕ Ajouter en ami
+</button>
+</div>
+
+@endif
+@endauth
+
     </div>
     
 </x-app-layout>
+<script>
+function sendFriendRequest(userId) {
+    const btn = document.getElementById('friend-btn');
+
+    btn.disabled = true;
+    btn.innerText = '⏳ Envoi...';
+
+    fetch(`/amis/${userId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'pending') {
+            btn.classList.remove('bg-indigo-600');
+            btn.classList.add('bg-gray-400');
+            btn.innerText = '⏳ Demande envoyée';
+        } else if (data.status === 'accepted') {
+            btn.classList.remove('bg-indigo-600');
+            btn.classList.add('bg-green-600');
+            btn.innerText = '✅ Amis';
+        }
+    })
+    .catch(() => {
+        btn.disabled = false;
+        btn.innerText = '➕ Ajouter en ami';
+        alert('Erreur, réessayez');
+    });
+}
+</script>
+
