@@ -65,6 +65,7 @@
                 @endif
             </div>
         @endif
+        
 
         {{-- ================= RECRUTEUR ================= --}}
         @if($user->role === 'recruteur' && $user->profilRecruteur)
@@ -105,6 +106,6 @@
                 @endif
             </div>
         @endif
-
     </div>
+    
 </x-app-layout>
