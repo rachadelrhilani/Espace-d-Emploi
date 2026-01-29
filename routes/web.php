@@ -16,6 +16,15 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard');
     Route::post('/amis/{user}', [AmitieController::class, 'store'])
     ->name('amis.add');
+    Route::get('/invitations', [AmitieController::class, 'invitations'])
+    ->name('amis.invitations');
+
+Route::post('/amis/{amitie}/accept', [AmitieController::class, 'accept'])
+    ->name('amis.accept');
+
+Route::post('/amis/{amitie}/reject', [AmitieController::class, 'reject'])
+    ->name('amis.reject');
+
 
     Route::get('/profil/{user}', [ProfileController::class, 'show'])
         ->name('users.show');
