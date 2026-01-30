@@ -109,17 +109,16 @@
         @auth
 @if(auth()->id() !== $user->id)
 
-<div id="friend-action">
+<div id="friend-action" data-user-id="{{ $user->id }}">
     <button
-    type="button"
-    data-user-id="{{ $user->id }}"
-    onclick="sendFriendRequest(this.getAttribute('data-user-id'))"
-    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-    id="friend-btn"
->
-    ➕ Ajouter en ami
-</button>
+        id="friend-btn"
+        class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg"
+        disabled
+    >
+        Chargement...
+    </button>
 </div>
+
 
 @endif
 @endauth
@@ -127,5 +126,5 @@
     </div>
     
 </x-app-layout>
-<script src="./ajax.js"></script>
+<script src="../ajax.js"></script>
 

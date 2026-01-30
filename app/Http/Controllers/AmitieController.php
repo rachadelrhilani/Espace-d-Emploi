@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class AmitieController extends Controller
 {
+
     public function invitations()
     {
         $invitations = Amitie::with('expediteur')
@@ -70,5 +71,56 @@ class AmitieController extends Controller
             'status' => 'pending',
             'message' => 'Demande envoyée'
         ]);
+    }
+    public function status(User $user)
+    {
+        $authId = Auth::id();
+         $rejected = Amitie::where(function ($q) use ($authId, $user) {
+            $q->where('id_expediteur', $authId)
+                ->where('id_destinataire', $user->id);
+        })
+            ->orWhere(function ($q) use ($authId, $user) {
+                $q->where('id_expediteur', $user->id)
+                    ->where('id_destinataire', $authId);
+            })
+            ->where('statut', 'rejected')
+            ->exists();
+
+        if ($rejected) {
+            return response()->json(['status' => 'rejected']);
+        }
+        $isFriend = Amitie::where(function ($q) use ($authId, $user) {
+            $q->where('id_expediteur', $authId)
+                ->where('id_destinataire', $user->id);
+        })
+            ->orWhere(function ($q) use ($authId, $user) {
+                $q->where('id_expediteur', $user->id)
+                    ->where('id_destinataire', $authId);
+            })
+            ->where('statut', 'accepted')
+            ->exists();
+
+        if ($isFriend) {
+            return response()->json(['status' => 'friends']);
+        }
+
+        // Invitation déjà envoyée
+        $pending =  Amitie::where(function ($q) use ($authId, $user) {
+            $q->where('id_expediteur', $authId)
+                ->where('id_destinataire', $user->id);
+        })
+            ->orWhere(function ($q) use ($authId, $user) {
+                $q->where('id_expediteur', $user->id)
+                    ->where('id_destinataire', $authId);
+            })
+            ->where('statut', 'pending')
+            ->exists();
+
+        if ($pending) {
+            return response()->json(['status' => 'pending']);
+        }
+
+       
+        return response()->json(['status' => 'none']);
     }
 }

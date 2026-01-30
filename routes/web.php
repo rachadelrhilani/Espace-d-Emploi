@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+        // routes/web.php
+Route::post('/friends/request', [AmitieController::class, 'send'])
+    ->name('friends.request');
+
+Route::get('/friends/status/{user}', [AmitieController::class, 'status'])
+    ->name('friends.status');
+
     Route::post('/amis/{user}', [AmitieController::class, 'store'])
     ->name('amis.add');
     Route::get('/invitations', [AmitieController::class, 'invitations'])
