@@ -27,6 +27,7 @@
                     </div>
                 </div>
 
+                
                 <div class="flex gap-3">
                     <button
                          data-invitation-id="{{ $invitation->id }}"

@@ -3,12 +3,8 @@
 use App\Http\Controllers\AmitieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserSearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::middleware('auth')->group(function () {
