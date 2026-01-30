@@ -18,7 +18,7 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('amis.invitations')" :active="request()->routeIs('amis.invitations')">
-                        {{ __('Dashboard') }}
+                        {{ __('Invitations') }}
                     </x-nav-link>
                 </div>
             </div>

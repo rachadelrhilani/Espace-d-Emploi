@@ -8,48 +8,56 @@
     <div class="py-10 max-w-4xl mx-auto space-y-6">
 
         @forelse($invitations as $invitation)
-            <div id="invite-{{ $invitation->id }}"
-                 class="bg-white p-5 rounded-xl shadow flex items-center justify-between">
+        <div id="invite-{{ $invitation->id }}"
+            class="bg-white p-5 rounded-xl shadow flex items-center justify-between">
 
-                <div class="flex items-center gap-4">
-                    <img
-                        src="{{ $invitation->expediteur->photo
+            <div class="flex items-center gap-4">
+                <img
+                    src="{{ $invitation->expediteur->photo
                                 ? asset('storage/'.$invitation->expediteur->photo)
                                 : 'https://ui-avatars.com/api/?name='.urlencode($invitation->expediteur->nom) }}"
-                        class="w-12 h-12 rounded-full object-cover"
-                    >
+                    class="w-12 h-12 rounded-full object-cover">
 
-                    <div>
-                        <p class="font-bold">{{ $invitation->expediteur->nom }}</p>
-                        <p class="text-sm text-gray-500">
-                            {{ ucfirst($invitation->expediteur->role) }}
-                        </p>
-                    </div>
+                <div>
+                    <p class="font-bold">{{ $invitation->expediteur->nom }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ ucfirst($invitation->expediteur->role) }}
+                    </p>
                 </div>
+            </div>
 
-                
-                <div class="flex gap-3">
-                    <button
-                         data-invitation-id="{{ $invitation->id }}"
-    onclick="respondInvitation(this.getAttribute('data-invitation-id'), 'accept')"
-                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                    >
-                        ✅ Accepter
-                    </button>
 
-                    <button
+            <div class="flex gap-3">
+                @if($invitation->statut === 'pending')
+                <button
                     data-invitation-id="{{ $invitation->id }}"
-                          onclick="respondInvitation(this.getAttribute('data-invitation-id'), 'reject')"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                    >
-                        ❌ Refuser
-                    </button>
-                </div>
+                    onclick="respondInvitation(this.getAttribute('data-invitation-id'), 'accept')"
+                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    Accepter
+                </button>
+
+                <button
+                    data-invitation-id="{{ $invitation->id }}"
+                    onclick="respondInvitation(this.getAttribute('data-invitation-id'), 'reject')"
+                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    Refuser
+                </button>
+                @elseif($invitation->statut === 'accepted')
+                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold">
+                    🤝 Amis
+                </span>
+
+                @elseif($invitation->statut === 'rejected')
+                <span class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold">
+                    ❌ Refusée
+                </span>
+                @endif
             </div>
+        </div>
         @empty
-            <div class="text-center text-gray-500">
-                Aucune invitation pour le moment.
-            </div>
+        <div class="text-center text-gray-500">
+            Aucune invitation pour le moment.
+        </div>
         @endforelse
 
     </div>
