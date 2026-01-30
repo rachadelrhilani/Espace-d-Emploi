@@ -103,10 +103,11 @@ Schema::create('amities', function (Blueprint $table) {
     $table->enum('statut', ['pending', 'accepted', 'rejected']);
     $table->timestamps();
 });
+```
 ### Installation
 
 ```
-git clone https://github.com/votre-repo/projet.git
+git clone https://github.com/rachadelrhilani/Espace-d-Emploi
 cd projet
 composer install
 npm install && npm run build
